@@ -16,7 +16,6 @@ jobs:
          paths:
             - .
   deploy:
-     <<: *vse
      docker:
        - image: ansible/ansible:ubuntu1604
          environment:
