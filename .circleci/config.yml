@@ -35,6 +35,7 @@ jobs:
         - ansible-playbook/install
         - run:
             command: sudo pip install ansible boto boto3
+        - run: chmod 400 ./ansible/devops.pem
         - ansible-playbook/playbook:
             playbook: ./ansible/ec2_deploy.yml
             playbook-options: --user ubuntu --key-file ./ansible/devops.pem
