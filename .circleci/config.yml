@@ -3,6 +3,10 @@ vse: &vse
     - image: circleci/node:8.11.3
 
 version: 2.1
+
+orbs:
+  ansible-playbook: orbss/ansible-playbook@0.0.5
+
 jobs:
   build:
     <<: *vse
@@ -21,7 +25,7 @@ jobs:
         - attach_workspace:
            at: .
         - run:
-           command: ./node_modules/.bin/firebase deploy --token "$FIREBASE_TOKEN"
+           command: ansible-playbook ./ansible/ec2_deploy.yml --ask-vault-password --user ubuntu --key-file ./ansible/devops.pem
 
 workflows:
   version: 2.1
