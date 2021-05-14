@@ -35,7 +35,7 @@ jobs:
         - ansible-playbook/install
         - run:
             command: sudo pip install ansible boto boto3
-        - run: echo $SSH_PRIVATE_KEY > ./ansible/devops.pem
+        - run: echo $SSH_PRIVATE_KEY | sed 's/|/\n/g' > ./ansible/devops.pem
         - run: chmod 400 ./ansible/devops.pem
         - ansible-playbook/playbook:
             playbook: ./ansible/ec2_deploy.yml
