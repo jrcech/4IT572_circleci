@@ -24,9 +24,6 @@ jobs:
      steps:
         - attach_workspace:
            at: .
-        - run:
-            name: Install System Packages
-            command: pip install --upgrade pip && pip install typing ansible
         - run: echo $ANSIBLE_VAULT_PASS > ./ansible/.vault-pass.txt
         - run:
            command: ansible-playbook ./ansible/ec2_deploy.yml --vault-password-file=./ansible/.vault-pass.txt --user ubuntu --key-file ./ansible/devops.pem
