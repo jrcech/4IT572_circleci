@@ -12,7 +12,6 @@ ansible: &ansible
         AWS_SESSION_TOKEN: $AWS_SESSION_TOKEN
 
 version: 2.1
-
 orbs:
   ansible-playbook: orbss/ansible-playbook@0.0.5
 
