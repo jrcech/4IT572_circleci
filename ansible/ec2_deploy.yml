@@ -80,3 +80,5 @@
         security_token: "{{ lookup('env', 'AWS_SESSION_TOKEN') }}"
         instance_ids: '{{ item.instance_id }}'
       loop: "{{ old_instances.instances }}"
+      loop_control:
+        label: "{{ item.instance_id }}"
