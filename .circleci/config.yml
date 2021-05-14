@@ -35,11 +35,12 @@ jobs:
         - ansible-playbook/install
         - run:
             command: sudo pip install ansible boto boto3
-        - run: echo $SSH_PRIVATE_KEY | sed 's/|/\n/g' > ./ansible/devops.pem
-        - run: chmod 400 ./ansible/devops.pem
+        - add_ssh_keys:
+            fingerprints:
+              - "9f:dc:ff:da:f5:c1:dc:92:79:f7:79:7a:48:cf:fa:eb"
         - ansible-playbook/playbook:
             playbook: ./ansible/ec2_deploy.yml
-            playbook-options: --user ubuntu --key-file ./ansible/devops.pem
+            playbook-options: --user ubuntu
 
 workflows:
   version: 2.1
