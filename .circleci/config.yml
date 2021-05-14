@@ -35,9 +35,6 @@ jobs:
         - ansible-playbook/install
         - run:
             command: sudo pip install ansible boto boto3
-        - add_ssh_keys:
-            fingerprints:
-              - "9f:dc:ff:da:f5:c1:dc:92:79:f7:79:7a:48:cf:fa:eb"
         - run: chmod 400 ./ansible/devops.pem
         - ansible-playbook/playbook:
             playbook: ./ansible/ec2_deploy.yml
