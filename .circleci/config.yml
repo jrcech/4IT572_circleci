@@ -2,7 +2,16 @@ vse: &vse
   docker:
     - image: circleci/node:8.11.3
 
+ansible: &ansible
+  docker:
+    - image: 'circleci/python:latest'
+      environment:
+        ANSIBLE_HOST_KEY_CHECKING: no
+
 version: 2.1
+orbs:
+  ansible-playbook: orbss/ansible-playbook@0.0.5
+
 jobs:
   build:
     <<: *vse
@@ -16,18 +25,16 @@ jobs:
          paths:
             - .
   deploy:
-     <<: *vse
-     docker:
-       - image: ansible/ansible:ubuntu1604
-         environment:
-           ANSIBLE_HOST_KEY_CHECKING: no
+     <<: *ansible
      steps:
         - attach_workspace:
            at: .
-        - run: echo $ANSIBLE_VAULT_PASS > ./ansible/.vault-pass.txt
+        - ansible-playbook/install
         - run:
-           command: ansible-playbook ./ansible/ec2_deploy.yml --vault-password-file=./ansible/.vault-pass.txt --user ubuntu --key-file ./ansible/devops.pem
-        - run: rm ./ansible/.vault-pass.txt
+            command: sudo pip install ansible boto boto3
+        - ansible-playbook/playbook:
+            playbook: ./ansible/ec2_deploy.yml
+            playbook-options: --user ubuntu --key-file ./ansible/devops.pem
 
 workflows:
   version: 2.1
