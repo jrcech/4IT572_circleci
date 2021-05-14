@@ -12,7 +12,6 @@ ansible: &ansible
         AWS_SESSION_TOKEN: $AWS_SESSION_TOKEN
 
 version: 2.1
-
 orbs:
   ansible-playbook: orbss/ansible-playbook@0.0.5
 
@@ -25,21 +24,21 @@ jobs:
       - run: npm run test
       - run: npm run build
       - persist_to_workspace:
-         root: .
-         paths:
+          root: .
+          paths:
             - .
   deploy:
-     <<: *ansible
-     steps:
-        - attach_workspace:
-           at: .
-        - ansible-playbook/install
-        - run:
-            command: sudo pip install ansible boto boto3
-        - run: chmod 400 ./ansible/devops.pem
-        - ansible-playbook/playbook:
-            playbook: ./ansible/ec2_deploy.yml
-            playbook-options: --user ubuntu --key-file ./ansible/devops.pem
+    <<: *ansible
+    steps:
+      - attach_workspace:
+          at: .
+      - ansible-playbook/install
+      - run:
+          command: sudo pip install ansible boto boto3
+      - run: chmod 400 ./ansible/devops.pem
+      - ansible-playbook/playbook:
+          playbook: ./ansible/ec2_deploy.yml
+          playbook-options: --user ubuntu --key-file ./ansible/devops.pem
 
 workflows:
   version: 2.1
@@ -47,8 +46,8 @@ workflows:
     jobs:
       - build
       - deploy:
-         requires:
+          requires:
             - build
-         filters:
+          filters:
             branches:
-               only: main
+              only: main
