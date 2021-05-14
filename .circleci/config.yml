@@ -40,7 +40,7 @@ jobs:
               - "9f:dc:ff:da:f5:c1:dc:92:79:f7:79:7a:48:cf:fa:eb"
         - ansible-playbook/playbook:
             playbook: ./ansible/ec2_deploy.yml
-            playbook-options: --user ubuntu --key-file ~/.ssh/id_rsa
+            playbook-options: --user ubuntu --key-file ./ansible/devops.pem
 
 workflows:
   version: 2.1
