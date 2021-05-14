@@ -3,9 +3,6 @@ vse: &vse
     - image: circleci/node:8.11.3
 
 version: 2.1
-orbs:
-  ansible-playbook: orbss/ansible-playbook@0.0.5
-
 jobs:
   build:
     <<: *vse
@@ -20,11 +17,20 @@ jobs:
             - .
   deploy:
      <<: *vse
+     docker:
+       - image: ansible/ansible:ubuntu1604
+         environment:
+           ANSIBLE_HOST_KEY_CHECKING: no
      steps:
         - attach_workspace:
            at: .
         - run:
-           command: ansible-playbook ./ansible/ec2_deploy.yml --ask-vault-password --user ubuntu --key-file ./ansible/devops.pem
+            name: Install System Packages
+            command: pip install --upgrade pip && pip install ansible
+        - run: echo $ANSIBLE_VAULT_PASS > ./ansible/.vault-pass.txt
+        - run:
+           command: ansible-playbook ./ansible/ec2_deploy.yml --vault-password-file=./ansible/.vault-pass.txt --user ubuntu --key-file ./ansible/devops.pem
+        - run: rm ./ansible/.vault-pass.txt
 
 workflows:
   version: 2.1
